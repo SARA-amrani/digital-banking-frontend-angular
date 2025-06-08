@@ -1,11 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {Customer} from "../model/customer.model";
 
 @Component({
-  selector: 'app-customers-accounts',
+  selector: 'app-customer-accounts',
   standalone: false,
   templateUrl: './customers-accounts.component.html',
-  styleUrl: './customers-accounts.component.css'
+  styleUrls: ['./customers-accounts.component.css']
 })
-export class CustomersAccountsComponent {
+export class CustomerAccountsComponent implements OnInit {
+  customerId! : string ;
+  customer! : Customer;
+  constructor(private route : ActivatedRoute, private router :Router) {
+    this.customer=this.router.getCurrentNavigation()?.extras.state as Customer;
+  }
+
+  ngOnInit(): void {
+    this.customerId = this.route.snapshot.params['id'];
+
+  }
 
 }

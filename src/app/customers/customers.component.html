@@ -6,48 +6,58 @@
         <div *ngIf="searchFormGroup">
           <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchCustomers()">
             <div class="input-group">
-              <label class="input-group-text">Keyword : </label>
+              <label class="input-group-text">Keyword :</label>
               <input type="text" formControlName="keyword" class="form-control">
-              <button class="btn btn-info ">
-                <i class="bi bi-search">
-                </i>
+              <button class="btn btn-info">
+                <i class="bi bi-search"></i>
               </button>
             </div>
           </form>
         </div>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let c of customers | async">
-            <td>{{c.id}}</td>
-            <td>{{c.name}}</td>
-            <td>{{c.email}}</td>
-            <td>
-              <button (click)="handleDeleteCustomer(c)" class="btn btn-danger">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
 
-          </tr>
-          </tbody>
-        </table>
+        <!-- 👉 Nouveau : Affichage conditionnel -->
+        <div *ngIf="listCustomers.length > 0; else noCustomers">
+          <table class="table mt-3">
+            <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Email</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let c of listCustomers">
+              <td>{{c.id}}</td>
+              <td>{{c.name}}</td>
+              <td>{{c.email}}</td>
+              <td>
+                <button (click)="handleDeleteCustomer(c)" class="btn btn-danger me-2">
+                  <i class="bi bi-trash"></i>
+                </button>
+                <button (click)="handleCustomerAccounts(c)" class="btn btn-success">
+                  Accounts
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Template si aucun client -->
+        <ng-template #noCustomers>
+          <div class="text-warning mt-3">Aucun client trouvé !</div>
+        </ng-template>
       </div>
     </div>
   </ng-container>
+
+  <!-- Template si erreur ou chargement -->
   <ng-template #failureOrLoading>
     <ng-container *ngIf="errorMessage; else loading">
-      <div class="text-danger">
+      <div class="text-danger mt-3">
         {{errorMessage}}
       </div>
     </ng-container>
     <ng-template #loading>
-      Loading .....
+      <div class="mt-3">Chargement en cours...</div>
     </ng-template>
   </ng-template>
 </div>
